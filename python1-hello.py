@@ -1,3 +1,3 @@
-print("hello world")
+m= "hello world"
 for i in range(5):
-  print(i)
+  print(m)
