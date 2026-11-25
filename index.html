@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Deployment Successful — Ansible &amp; Jenkins Automated Node</title>
+
+  <!-- Google Fonts: Inter for crisp UI typography and JetBrains Mono for metrics/logs -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Tailwind Configuration for Inter & JetBrains Mono fonts -->
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'SFMono-Regular', 'monospace'],
+          },
+        },
+      },
+    };
+  </script>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans antialiased selection:bg-indigo-500/30 selection:text-indigo-200 overflow-x-hidden min-h-screen flex flex-col">
+
+  <!-- Subtle Ambient Background Glow -->
+  <div class="pointer-events-none fixed inset-0 -z-10 overflow-hidden" aria-hidden="true">
+    <div class="absolute -top-40 left-1/2 -translate-x-1/2 h-[32rem] w-[48rem] rounded-full bg-indigo-600/15 blur-3xl"></div>
+    <div class="absolute top-1/3 right-0 h-80 w-80 rounded-full bg-emerald-500/10 blur-3xl"></div>
+  </div>
+
+  <!-- Navigation Bar -->
+  <header class="sticky top-0 z-50 border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-md">
+    <nav class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3.5 sm:px-6 lg:px-8" aria-label="Primary Navigation">
+      <!-- Brand Title & Logo -->
+      <a href="#overview" class="group flex items-center gap-2.5 rounded-lg p-1 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-emerald-500 text-white shadow-lg shadow-indigo-500/20 transition-transform duration-200 group-hover:scale-105">
+          <!-- Server / Terminal Icon -->
+          <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01" />
+          </svg>
+        </span>
+        <div class="flex flex-col">
+          <span class="text-sm font-bold tracking-tight text-white sm:text-base">NodeOps</span>
+          <span class="text-[11px] font-medium text-slate-400 hidden sm:block">CI/CD Control Plane</span>
+        </div>
+      </a>
+
+      <!-- Smooth-Scroll Navigation Links -->
+      <div class="flex items-center gap-1 sm:gap-2">
+        <a href="#overview" class="rounded-lg px-3 py-2 text-sm font-medium text-slate-300 transition-colors hover:bg-slate-800/70 hover:text-white">
+          Overview
+        </a>
+        <a href="#stack" class="rounded-lg px-3 py-2 text-sm font-medium text-slate-300 transition-colors hover:bg-slate-800/70 hover:text-white">
+          Stack
+        </a>
+        <a href="#status" class="rounded-lg px-3 py-2 text-sm font-medium text-slate-300 transition-colors hover:bg-slate-800/70 hover:text-white">
+          Status
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex-1">
+
+    <!-- Hero Section -->
+    <section id="overview" class="mx-auto max-w-6xl px-4 pt-16 pb-14 sm:px-6 sm:pt-24 sm:pb-20 lg:px-8">
+      <div class="mx-auto max-w-3xl text-center">
+
+        <!-- Live Green "System Online" Badge -->
+        <div class="mb-6 inline-flex items-center gap-2.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-1.5 text-xs font-semibold tracking-wide text-emerald-300 shadow-sm">
+          <span class="relative flex h-2.5 w-2.5">
+            <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
+            <span class="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-400"></span>
+          </span>
+          SYSTEM ONLINE
+        </div>
+
+        <!-- Headline -->
+        <h1 class="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
+          Deployment
+          <span class="bg-gradient-to-r from-indigo-400 via-sky-300 to-emerald-400 bg-clip-text text-transparent">
+            Successful
+          </span>
+        </h1>
+
+        <!-- Short Subtitle -->
+        <p class="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-slate-400 sm:text-lg">
+          This Linux server was automatically provisioned with <span class="font-medium text-slate-200">Ansible</span> playbooks and deployed via <span class="font-medium text-slate-200">Jenkins</span> CI/CD. All services are verified and ready to serve traffic.
+        </p>
+
+        <!-- Primary Action Buttons -->
+        <div class="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+          <button
+            id="healthCheckBtn"
+            type="button"
+            class="group inline-flex w-full items-center justify-center gap-2.5 rounded-xl bg-indigo-600 px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-indigo-600/25 transition-all duration-200 hover:bg-indigo-500 hover:shadow-indigo-500/35 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2 focus:ring-offset-slate-950 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto"
+          >
+            <svg id="healthBtnIcon" class="h-4 w-4 transition-transform duration-200 group-hover:scale-110" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span id="healthBtnText">Run Health Check</span>
+          </button>
+
+          <a
+            href="#status"
+            class="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-slate-800 bg-slate-900/70 px-6 py-3.5 text-sm font-semibold text-slate-200 transition-colors hover:border-slate-700 hover:bg-slate-800/80 hover:text-white sm:w-auto"
+          >
+            View Live Metrics
+          </a>
+        </div>
+
+        <!-- Interactive Health-Check Console Panel -->
+        <div
+          id="healthPanel"
+          class="mx-auto mt-8 hidden max-w-xl overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/90 text-left shadow-2xl shadow-black/40 transition-all duration-300"
+          role="region"
+          aria-live="polite"
+          aria-label="Interactive Health Check Output"
+        >
+          <!-- Panel Header -->
+          <div class="flex items-center justify-between border-b border-slate-800 bg-slate-900 px-4 py-2.5">
+            <div class="flex items-center gap-2">
+              <span class="h-2.5 w-2.5 rounded-full bg-slate-700"></span>
+              <span class="h-2.5 w-2.5 rounded-full bg-slate-700"></span>
+              <span class="h-2.5 w-2.5 rounded-full bg-slate-700"></span>
+              <span class="ml-2 font-mono text-xs text-slate-400">health-check.sh</span>
+            </div>
+            <span id="healthBadge" class="rounded-md bg-indigo-500/15 px-2 py-0.5 font-mono text-[11px] font-medium text-indigo-300">
+              RUNNING...
+            </span>
+          </div>
+
+          <!-- Progress Bar -->
+          <div class="h-1 w-full bg-slate-800">
+            <div id="healthProgress" class="h-full w-0 bg-gradient-to-r from-indigo-500 to-emerald-400 transition-all duration-300 ease-out"></div>
+          </div>
+
+          <!-- Check Steps List -->
+          <div id="healthLog" class="space-y-2.5 p-4 font-mono text-xs sm:text-sm">
+            <!-- Dynamically populated by JavaScript -->
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 3-Card Feature / Stack Grid -->
+    <section id="stack" class="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
+      <div class="mb-10 flex flex-col items-start justify-between gap-2 sm:flex-row sm:items-end">
+        <div>
+          <h2 class="text-xs font-semibold uppercase tracking-widest text-indigo-400">Automation Stack</h2>
+          <p class="mt-1 text-2xl font-bold tracking-tight text-white sm:text-3xl">Built for Repeatable Delivery</p>
+        </div>
+        <p class="text-sm text-slate-400">Zero manual drift from commit to production.</p>
+      </div>
+
+      <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
+
+        <!-- Card 1: Ansible Automation -->
+        <article class="group relative rounded-2xl border border-slate-800/90 bg-slate-900/60 p-6 transition-all duration-200 hover:-translate-y-0.5 hover:border-indigo-500/50 hover:bg-slate-900/90">
+          <div class="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-xl border border-indigo-500/25 bg-indigo-500/10 text-indigo-400">
+            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+          </div>
+          <h3 class="text-lg font-semibold text-white">Ansible Automation</h3>
+          <p class="mt-2 text-sm leading-relaxed text-slate-400">
+            Agentless, idempotent YAML playbooks configure packages, firewall rules, and web server settings consistently across every node.
+          </p>
+          <div class="mt-5 flex items-center gap-2 font-mono text-xs text-indigo-300">
+            <span class="rounded-md bg-indigo-500/10 px-2.5 py-1">Playbook Verified</span>
+            <span class="rounded-md bg-slate-800/80 px-2.5 py-1 text-slate-300">0 Drift</span>
+          </div>
+        </article>
+
+        <!-- Card 2: Jenkins CI/CD -->
+        <article class="group relative rounded-2xl border border-slate-800/90 bg-slate-900/60 p-6 transition-all duration-200 hover:-translate-y-0.5 hover:border-emerald-500/50 hover:bg-slate-900/90">
+          <div class="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-xl border border-emerald-500/25 bg-emerald-500/10 text-emerald-400">
+            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+          </div>
+          <h3 class="text-lg font-semibold text-white">Jenkins CI/CD</h3>
+          <p class="mt-2 text-sm leading-relaxed text-slate-400">
+            Automated build pipelines pull source changes, execute validation checks, and trigger Ansible deployments with full console audit logs.
+          </p>
+          <div class="mt-5 flex items-center gap-2 font-mono text-xs text-emerald-300">
+            <span class="rounded-md bg-emerald-500/10 px-2.5 py-1">Pipeline Green</span>
+            <span class="rounded-md bg-slate-800/80 px-2.5 py-1 text-slate-300">Auto-Deploy</span>
+          </div>
+        </article>
+
+        <!-- Card 3: Linux Server -->
+        <article class="group relative rounded-2xl border border-slate-800/90 bg-slate-900/60 p-6 transition-all duration-200 hover:-translate-y-0.5 hover:border-indigo-500/50 hover:bg-slate-900/90">
+          <div class="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-xl border border-sky-500/25 bg-sky-500/10 text-sky-400">
+            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+          </div>
+          <h3 class="text-lg font-semibold text-white">Linux Server</h3>
+          <p class="mt-2 text-sm leading-relaxed text-slate-400">
+            Hardened Linux host running supervised systemd daemons, secure SSH key authentication, and low-latency HTTP delivery.
+          </p>
+          <div class="mt-5 flex items-center gap-2 font-mono text-xs text-sky-300">
+            <span class="rounded-md bg-sky-500/10 px-2.5 py-1">systemd Active</span>
+            <span class="rounded-md bg-slate-800/80 px-2.5 py-1 text-slate-300">SSH Secured</span>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- Live Local Timestamp & Simulated Server Metrics Bar -->
+    <section id="status" class="mx-auto max-w-6xl px-4 pt-6 pb-20 sm:px-6 lg:px-8">
+      <div class="rounded-2xl border border-slate-800/90 bg-slate-900/70 p-6 shadow-xl shadow-black/20 backdrop-blur-sm">
+        <div class="mb-5 flex flex-col justify-between gap-2 border-b border-slate-800/80 pb-4 sm:flex-row sm:items-center">
+          <div class="flex items-center gap-2.5">
+            <span class="h-2.5 w-2.5 rounded-full bg-emerald-400"></span>
+            <h2 class="text-sm font-semibold uppercase tracking-wider text-slate-200">Live Node Telemetry</h2>
+          </div>
+          <p id="lastCheckMeta" class="font-mono text-xs text-slate-400">
+            Last check: Verified on page load
+          </p>
+        </div>
+
+        <!-- Metrics Grid -->
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+
+          <!-- Metric 1: Status -->
+          <div class="rounded-xl border border-slate-800/80 bg-slate-950/60 p-4">
+            <p class="text-xs font-medium uppercase tracking-wider text-slate-400">Status</p>
+            <div class="mt-2 flex items-center gap-2">
+              <span class="inline-flex h-2.5 w-2.5 rounded-full bg-emerald-400"></span>
+              <span id="metricStatus" class="text-xl font-bold text-emerald-400">Healthy</span>
+            </div>
+          </div>
+
+          <!-- Metric 2: Uptime -->
+          <div class="rounded-xl border border-slate-800/80 bg-slate-950/60 p-4">
+            <p class="text-xs font-medium uppercase tracking-wider text-slate-400">Uptime</p>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span class="font-mono text-xl font-bold text-white">99.98%</span>
+              <span class="text-xs text-slate-400">30d avg</span>
+            </div>
+          </div>
+
+          <!-- Metric 3: Build -->
+          <div class="rounded-xl border border-slate-800/80 bg-slate-950/60 p-4">
+            <p class="text-xs font-medium uppercase tracking-wider text-slate-400">Build</p>
+            <div class="mt-2 flex items-center gap-2">
+              <span class="inline-flex items-center rounded-md bg-emerald-500/15 px-2.5 py-0.5 font-mono text-sm font-semibold text-emerald-300">
+                Passing
+              </span>
+              <span class="font-mono text-xs text-slate-400">#ansible_job</span>
+            </div>
+          </div>
+
+          <!-- Metric 4: Local Timestamp -->
+          <div class="rounded-xl border border-slate-800/80 bg-slate-950/60 p-4">
+            <p class="text-xs font-medium uppercase tracking-wider text-slate-400">Local Server Time</p>
+            <div class="mt-2">
+              <p id="liveClock" class="font-mono text-base font-semibold text-indigo-300">--:--:--</p>
+              <p id="liveDate" class="mt-0.5 font-mono text-[11px] text-slate-400">Loading date...</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Clean Footer -->
+  <footer class="border-t border-slate-800/80 bg-slate-950/90">
+    <div class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-4 py-6 text-xs text-slate-400 sm:flex-row sm:px-6 lg:px-8">
+      <p>
+        &copy; <span id="footerYear">2026</span> NodeOps Automated Infrastructure. Deployed via Ansible &amp; Jenkins.
+      </p>
+      <div class="flex items-center gap-4">
+        <span class="font-mono text-slate-500">v1.0.0</span>
+        <a href="#overview" class="rounded-md px-2 py-1 text-slate-300 transition-colors hover:bg-slate-800 hover:text-white">
+          Back to top &uarr;
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Minimal JavaScript for Live Timestamp & Interactive Health Check -->
+  <script>
+    (function () {
+      'use strict';
+
+      // DOM References
+      const liveClockEl = document.getElementById('liveClock');
+      const liveDateEl = document.getElementById('liveDate');
+      const footerYearEl = document.getElementById('footerYear');
+      const healthCheckBtn = document.getElementById('healthCheckBtn');
+      const healthBtnText = document.getElementById('healthBtnText');
+      const healthPanel = document.getElementById('healthPanel');
+      const healthProgress = document.getElementById('healthProgress');
+      const healthLog = document.getElementById('healthLog');
+      const healthBadge = document.getElementById('healthBadge');
+      const lastCheckMeta = document.getElementById('lastCheckMeta');
+
+      let isChecking = false;
+
+      /**
+       * Updates the live local clock, date, and footer year.
+       */
+      function updateTimestamp() {
+        try {
+          const now = new Date();
+          if (liveClockEl) {
+            liveClockEl.textContent = now.toLocaleTimeString([], {
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit',
+            });
+          }
+          if (liveDateEl) {
+            liveDateEl.textContent = now.toLocaleDateString([], {
+              weekday: 'short',
+              year: 'numeric',
+              month: 'short',
+              day: 'numeric',
+            });
+          }
+          if (footerYearEl) {
+            footerYearEl.textContent = String(now.getFullYear());
+          }
+        } catch (err) {
+          console.error('Failed to update timestamp:', err);
+        }
+      }
+
+      /**
+       * Utility delay helper for sequential health-check steps.
+       * @param {number} ms - Milliseconds to wait.
+       * @returns {Promise<void>}
+       */
+      function wait(ms) {
+        return new Promise((resolve) => setTimeout(resolve, ms));
+      }
+
+      /**
+       * Runs a simulated interactive health check with animated step-by-step output.
+       */
+      async function runHealthCheck() {
+        if (isChecking) return;
+        isChecking = true;
+
+        const checks = [
+          { label: 'Checking HTTP service & reverse proxy', result: 'OK (11ms)' },
+          { label: 'Verifying Ansible playbook state', result: '0 drift' },
+          { label: 'Validating Jenkins build artifact', result: 'PASSING' },
+          { label: 'Inspecting Linux memory & load avg', result: 'OPTIMAL' },
+        ];
+
+        try {
+          // Prepare button & panel UI
+          healthCheckBtn.disabled = true;
+          healthBtnText.textContent = 'Running Diagnostics...';
+          healthPanel.classList.remove('hidden');
+          healthLog.innerHTML = '';
+          healthProgress.style.width = '5%';
+          healthBadge.textContent = 'RUNNING...';
+          healthBadge.className = 'rounded-md bg-indigo-500/15 px-2 py-0.5 font-mono text-[11px] font-medium text-indigo-300';
+
+          // Execute each diagnostic step with visual feedback
+          for (let i = 0; i < checks.length; i++) {
+            const step = checks[i];
+            const row = document.createElement('div');
+            row.className = 'flex items-center justify-between gap-2 text-slate-300';
+
+            const leftSpan = document.createElement('span');
+            leftSpan.className = 'truncate';
+            leftSpan.textContent = '> ' + step.label + '...';
+
+            const rightSpan = document.createElement('span');
+            rightSpan.className = 'shrink-0 text-indigo-400';
+            rightSpan.textContent = '[...]';
+
+            row.appendChild(leftSpan);
+            row.appendChild(rightSpan);
+            healthLog.appendChild(row);
+
+            await wait(360);
+
+            rightSpan.className = 'shrink-0 font-semibold text-emerald-400';
+            rightSpan.textContent = '[ ' + step.result + ' ]';
+
+            const progressPct = Math.round(((i + 1) / checks.length) * 100);
+            healthProgress.style.width = progressPct + '%';
+          }
+
+          // Final summary line
+          const summary = document.createElement('div');
+          summary.className = 'mt-3 flex items-center justify-between rounded-lg border border-emerald-500/25 bg-emerald-500/10 px-3 py-2 text-emerald-300';
+          summary.innerHTML = '<span>All checks passed — Node is healthy.</span><span class="font-semibold">100%</span>';
+          healthLog.appendChild(summary);
+
+          healthBadge.textContent = 'PASSED';
+          healthBadge.className = 'rounded-md bg-emerald-500/15 px-2 py-0.5 font-mono text-[11px] font-semibold text-emerald-300';
+
+          // Update telemetry metadata timestamp
+          if (lastCheckMeta) {
+            const completedAt = new Date().toLocaleTimeString([], {
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit',
+            });
+            lastCheckMeta.textContent = 'Last check: Passed at ' + completedAt;
+          }
+        } catch (err) {
+          console.error('Health check encountered an error:', err);
+          healthBadge.textContent = 'ERROR';
+          healthBadge.className = 'rounded-md bg-rose-500/15 px-2 py-0.5 font-mono text-[11px] font-semibold text-rose-300';
+        } finally {
+          healthCheckBtn.disabled = false;
+          healthBtnText.textContent = 'Run Health Check Again';
+          isChecking = false;
+        }
+      }
+
+      // Initialize live clock immediately and tick every second
+      updateTimestamp();
+      setInterval(updateTimestamp, 1000);
+
+      // Attach click listener for health-check button
+      if (healthCheckBtn) {
+        healthCheckBtn.addEventListener('click', runHealthCheck);
+      }
+    })();
+  </script>
+</body>
+</html>
